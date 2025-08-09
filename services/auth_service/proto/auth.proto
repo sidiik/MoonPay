@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/sidiik/moonpay/auth_service/internal/delivery/grpc;pb";
+
+service AuthService {
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc Signup (SignupRequest) returns (SignupResponse);
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message SignupRequest {
+    string email  = 1;
+    string password = 2;
+    string fullName = 3;
+}
+
+message LoginResponse {
+    string accessToken = 1;
+    string refreshToken = 2;
+}
+
+message SignupResponse {
+    string email = 1; 
+}
