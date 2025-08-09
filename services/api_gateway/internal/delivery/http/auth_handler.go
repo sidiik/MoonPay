@@ -36,7 +36,13 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		slog.Warn("failed to parse body", "error", err)
-		pkg.SendResponse(c, http.StatusBadRequest, constants.ErrInvalidRequest, nil)
+		pkg.SendResponse(c, http.StatusBadRequest, constants.ErrInvalidRequest, nil, err)
+		return
+	}
+
+	if err := h.validator.Struct(&body); err != nil {
+		slog.Warn("failed to parse body", "error", err)
+		pkg.SendResponse(c, http.StatusBadRequest, constants.ErrInvalidRequest, nil, err)
 		return
 	}
 
@@ -49,10 +55,10 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	if err != nil {
 		slog.Warn("error from auth grpc service", "error", err)
-		pkg.SendResponse(c, http.StatusUnauthorized, constants.ErrUnauthorized, nil)
+		pkg.SendResponse(c, http.StatusUnauthorized, constants.ErrUnauthorized, nil, err)
 		return
 	}
 
-	pkg.SendResponse(c, http.StatusOK, "", resp)
+	pkg.SendResponse(c, http.StatusOK, "", resp, nil)
 
 }
