@@ -11,10 +11,11 @@ import (
 var folders = []string{
 	"cmd/",
 	"internal/domain",
-	"internal/usecase",
+	"internal/services",
 	"internal/repository",
 	"internal/delivery/http",
 	"internal/delivery/grpc",
+	"internal/infra",
 	"pkg",
 }
 
