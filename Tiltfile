@@ -10,6 +10,7 @@ k8s_resource(workload='api-gateway', port_forwards=8080)
 # Auth service service
 k8s_yaml([
   'services/auth_service/zarf/k8s/deployment.yaml',
+  'services/auth_service/zarf/k8s/configmap.yaml',
 ])
 
 docker_build('auth-service', 'services/auth_service', dockerfile='services/auth_service/Dockerfile')

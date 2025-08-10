@@ -13,7 +13,7 @@ func main() {
 	r := gin.Default()
 
 	// Init auth service
-	authServiceClient := auth.ConnectAuthService("auth-service:8081")
+	authServiceClient := auth.ConnectAuthService("auth-service:80")
 
 	h.InitV1Routes(r, authServiceClient)
 

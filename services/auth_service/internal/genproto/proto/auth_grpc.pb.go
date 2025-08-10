@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: proto/auth.proto
 
-package pb
+package auth
 
 import (
 	context "context"

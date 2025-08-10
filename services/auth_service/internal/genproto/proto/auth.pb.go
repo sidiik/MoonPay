@@ -4,7 +4,7 @@
 // 	protoc        v3.21.12
 // source: proto/auth.proto
 
-package pb
+package auth
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -248,7 +248,7 @@ const file_proto_auth_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tR\x05email2t\n" +
 	"\vAuthService\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x123\n" +
-	"\x06Signup\x12\x13.auth.SignupRequest\x1a\x14.auth.SignupResponseBBZ@github.com/sidiik/moonpay/auth_service/internal/delivery/grpc;pbb\x06proto3"
+	"\x06Signup\x12\x13.auth.SignupRequest\x1a\x14.auth.SignupResponseB3Z1github.com/sidiik/moonpay/auth_service/proto;authb\x06proto3"
 
 var (
 	file_proto_auth_proto_rawDescOnce sync.Once

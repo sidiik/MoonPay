@@ -16,6 +16,9 @@ spec:
       labels:
         app: auth-service
     spec:
+      envFrom:
+        - configMapRef:
+            name: auth-service-configmap
       containers:
         - image: auth-service
           name: auth-service
@@ -38,7 +41,7 @@ metadata:
 spec:
   ports:
     - name: 8081-50051
-      port: 8081
+      port: 80
       protocol: TCP
       targetPort: 50051
   selector:
