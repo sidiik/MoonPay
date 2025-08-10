@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Running postgresql server with username of 'postgres' and password of 'admin@123'"
+
+docker run -d --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin@123 -e POSTGRES_DB=postgres -p 5432:5432 -v pgdata:/var/lib/postgresql/data postgres:latest
