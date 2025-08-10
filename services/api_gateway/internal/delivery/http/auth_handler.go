@@ -1,6 +1,7 @@
 package http
 
 import (
+	"errors"
 	"log/slog"
 	"net/http"
 
@@ -55,7 +56,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	if err != nil {
 		slog.Warn("error from auth grpc service", "error", err)
-		pkg.SendResponse(c, http.StatusUnauthorized, constants.ErrUnauthorized, nil, err)
+		pkg.SendResponse(c, http.StatusUnauthorized, constants.ErrUnauthorized, nil, errors.New(constants.ErrInternal))
 		return
 	}
 

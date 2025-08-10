@@ -16,6 +16,8 @@ var folders = []string{
 	"internal/delivery/http",
 	"internal/delivery/grpc",
 	"internal/infra",
+	"zarf/docker",
+	"zarf/k8s",
 	"pkg",
 }
 

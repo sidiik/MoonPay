@@ -1,7 +1,7 @@
 package constants
 
 const (
-	ErrInvalidRequest = "Invalid request payload"
-	ErrUnauthorized   = "Unauthorized"
-	ErrInternal       = "Internal server error"
+	ErrInvalidRequest = "invalid request payload"
+	ErrUnauthorized   = "unauthorized"
+	ErrInternal       = "internal server error"
 )
