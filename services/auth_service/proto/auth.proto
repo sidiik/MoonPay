@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package auth;
+package authpb;
 
-option go_package = "github.com/sidiik/moonpay/auth_service/proto;auth";
+option go_package = "github.com/sidiik/moonpay/auth_service/authpb;authpb";
 
 service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse);

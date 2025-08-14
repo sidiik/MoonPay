@@ -1,22 +1,25 @@
-package grpc_handler
+package handler
 
 import (
 	"context"
 
-	auth "github.com/sidiik/moonpay/auth_service/internal/genproto/proto"
+	authpb "github.com/sidiik/moonpay/auth_service/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type AuthServer struct {
-	auth.UnimplementedAuthServiceServer
+	authpb.UnimplementedAuthServiceServer
 }
 
 func NewAuthServer() *AuthServer {
 	return &AuthServer{}
 }
 
-func (s *AuthServer) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
-	return &auth.LoginResponse{
-		AccessToken:  req.Email,
-		RefreshToken: req.Password,
-	}, nil
+func (s *AuthServer) Login(ctx context.Context, req *authpb.LoginRequest) (*authpb.LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+}
+
+func (s *AuthServer) Signup(context.Context, *authpb.SignupRequest) (*authpb.SignupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
 }
