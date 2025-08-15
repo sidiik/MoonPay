@@ -4,13 +4,9 @@
 - Uses **event-driven patterns** to handle asynchronous operations.
 - Focuses on **learning concepts** like Sagas, message passing, and service orchestration.
 
----
-
 ## Contributors
 
 - [sidiik](https://github.com/sidiik) - Sidiiq Omar (sidiik)
-
----
 
 ## Tech Stack
 
@@ -19,8 +15,6 @@
 - **Database:** MongoDB / PostgreSQL (can be configured per service)
 - **Messaging:** RabbitMQ / Kafka (optional, for event-driven workflows)
 - **Authentication:** JWT
-
----
 
 ## Getting Started
 
@@ -35,8 +29,14 @@
    - Minikube or Kubernetes cluster for local development.
    - kubectl command-line tool for interacting with your cluster.
 2. **Clone the repository:**
+
    ```bash
    1. git clone https://github.com/sidiik/MoonPay.git
    2. cd MoonPay
-   3. tilt up
+   3. tilt up - to start the services
+   4. tilt down - to stop the services
+   ```
+
+   ```
+
    ```
