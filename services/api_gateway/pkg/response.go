@@ -7,7 +7,7 @@ import (
 	"github.com/sidiik/moonpay/api_gateway/internal/dto"
 )
 
-func SendResponse(c *gin.Context, statusCode int, message string, data any, err error) {
+func SendResponse(c *gin.Context, statusCode int, code, message string, data any, err error) {
 	status := "success"
 
 	if statusCode >= http.StatusBadRequest {
@@ -16,6 +16,7 @@ func SendResponse(c *gin.Context, statusCode int, message string, data any, err 
 
 	resp := dto.CommonResponse{
 		Status:  status,
+		Code:    code,
 		Message: message,
 		Data:    data,
 	}

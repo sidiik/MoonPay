@@ -11,6 +11,9 @@ import (
 
 	handler "github.com/sidiik/moonpay/auth_service/internal/delivery/grpc"
 	"github.com/sidiik/moonpay/auth_service/internal/infra/config"
+	"github.com/sidiik/moonpay/auth_service/internal/infra/db"
+	"github.com/sidiik/moonpay/auth_service/internal/repository"
+	"github.com/sidiik/moonpay/auth_service/internal/services"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
 	"google.golang.org/grpc"
 )
@@ -19,7 +22,15 @@ func main() {
 	slog.Info("Initializing auth service env variables")
 	config.InitConfig()
 
-	slog.Info("Starting auth service")
+	slog.Info("Initializing DB Connections")
+	conns, err := db.InitDb()
+	if err != nil {
+		slog.Error("failed to connect to database", "error", err)
+		return
+	}
+
+	authRepo := repository.NewAuthRepository(conns)
+	authService := services.NewAuthService(authRepo)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.AppConfig.Port))
 	if err != nil {
@@ -30,7 +41,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// Registering the auth service
-	authpb.RegisterAuthServiceServer(grpcServer, handler.NewAuthServer())
+	authpb.RegisterAuthServiceServer(grpcServer, handler.NewAuthServerHandler(authService))
 	slog.Info(fmt.Sprintf("🚀 gRPC AuthService running on :%s", config.AppConfig.Port))
 
 	stop := make(chan os.Signal, 1)

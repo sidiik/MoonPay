@@ -1,0 +1,78 @@
+package services
+
+import (
+	"context"
+	"log/slog"
+	"strings"
+
+	"github.com/sidiik/moonpay/auth_service/internal/constants"
+	"github.com/sidiik/moonpay/auth_service/internal/domain"
+	"github.com/sidiik/moonpay/auth_service/internal/repository"
+	authpb "github.com/sidiik/moonpay/auth_service/proto"
+	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+)
+
+type AuthService struct {
+	authRepo *repository.AuthRepository
+}
+
+func NewAuthService(authRepo *repository.AuthRepository) *AuthService {
+	return &AuthService{
+		authRepo: authRepo,
+	}
+}
+
+func (s *AuthService) SignUp(ctx context.Context, data *authpb.SignupRequest) (*domain.User, error) {
+	data.Email = strings.Trim(strings.ToLower(data.Email), " ")
+	if existingUser, _ := s.authRepo.GetUserByEmail(ctx, data.Email); existingUser != nil {
+		slog.Error("failed to create user", "email", data.Email, "error", constants.ErrEmailAlreadyExists)
+		return nil, status.Error(codes.AlreadyExists, constants.ErrEmailAlreadyExists)
+	}
+
+	slog.Info("creating new user", "email", data.Email)
+
+	slog.Info("Hashing the password")
+	hashed, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		slog.Error("failed to create user", "email", data.Email, "error", err)
+		return nil, status.Error(codes.Internal, constants.ErrInternalServer)
+	}
+
+	user := domain.User{
+		Username: strings.Split(data.Email, "@")[0],
+		Email:    data.Email,
+		FullName: data.FullName,
+		Password: string(hashed),
+	}
+
+	if err := s.authRepo.CreateUser(ctx, user); err != nil {
+		slog.Error("failed to create user", "email", data.Email, "error", err)
+	}
+
+	return &user, nil
+
+}
+
+func (s *AuthService) SignIn(ctx context.Context, data *authpb.LoginRequest) (*authpb.LoginResponse, error) {
+	data.Email = strings.Trim(strings.ToLower(data.Email), " ")
+	existingUser, err := s.authRepo.GetUserByEmail(ctx, data.Email)
+	if err != nil {
+		slog.Error("failed to get user by email", "email", data.Email, "error", constants.ErrInvalidCredentials)
+		return nil, status.Error(codes.Unauthenticated, constants.ErrInvalidCredentials)
+	}
+
+	slog.Info("Check if the password is correct")
+	if err := bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(data.Password)); err != nil {
+		slog.Error("incorrect password", "email", data.Email, "error", constants.ErrInvalidCredentials)
+		return nil, status.Error(codes.Unauthenticated, constants.ErrInvalidCredentials)
+	}
+
+	return &authpb.LoginResponse{
+		AccessToken:  "ACCESS-TOKEN",
+		RefreshToken: "REFRESH-TOKEN",
+	}, nil
+
+}

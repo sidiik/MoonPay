@@ -1,7 +1,7 @@
 ########################################
 # Builder stage
 ########################################
-FROM golang:1.24 AS builder
+FROM golang:1.24-alpine AS builder
 
 # Optional: set a build-time arg for binary name and module download mode
 ARG BINARY_NAME=app

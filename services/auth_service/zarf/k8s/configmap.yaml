@@ -7,3 +7,16 @@ data:
   PORT: '50051'
   APP_ENV: 'production'
   LOG_LEVEL: 'info'
+  DB_READER_HOST: 'host.minikube.internal'
+  DB_READER_USER: 'postgres'
+  DB_READER_PORT: '5432'
+  DB_READER_NAME: 'mp_auth_service'
+  DB_READER_PASSWORD: 'admin@123'
+  #  Write-only databases
+  DB_WRITER_HOST: 'host.minikube.internal'
+  DB_WRITER_USER: 'postgres'
+  DB_WRITER_PORT: '5432'
+  DB_WRITER_NAME: 'mp_auth_service'
+  DB_WRITER_PASSWORD: 'admin@123'
+
+  JWT_SECRET: 'OqdI5MZ2T4drR4NE95MhMiAfyic9Oen0QQp2oXBWVls='

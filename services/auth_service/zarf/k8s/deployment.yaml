@@ -16,11 +16,13 @@ spec:
       labels:
         app: auth-service
     spec:
-      envFrom:
-        - configMapRef:
-            name: auth-service-configmap
       containers:
-        - image: auth-service
+        - envFrom:
+            - configMapRef:
+                name: auth-service-configmap
+            # - secretRef:
+            #     name: auth-service-secrets
+          image: auth-service
           name: auth-service
           resources:
             requests:

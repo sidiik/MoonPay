@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 
@@ -9,6 +10,20 @@ import (
 
 type Config struct {
 	Port string
+
+	// Write only Databases
+	DBWriterName     string
+	DBWriterUser     string
+	DBWriterPassword string
+	DBWriterHost     string
+	DBWriterPort     string
+
+	// Read only databases
+	DBReaderName     string
+	DBReaderUser     string
+	DBReaderPassword string
+	DBReaderHost     string
+	DBReaderPort     string
 }
 
 var AppConfig Config
@@ -17,8 +32,21 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	AppConfig = Config{
-		Port: getEnv("PORT"),
+		Port:             getEnv("PORT"),
+		DBWriterName:     getEnv("DB_WRITER_NAME"),
+		DBWriterUser:     getEnv("DB_WRITER_USER"),
+		DBWriterPassword: getEnv("DB_WRITER_PASSWORD"),
+		DBWriterHost:     getEnv("DB_WRITER_HOST"),
+		DBWriterPort:     getEnv("DB_WRITER_PORT"),
+
+		DBReaderName:     getEnv("DB_READER_NAME"),
+		DBReaderUser:     getEnv("DB_READER_USER"),
+		DBReaderPassword: getEnv("DB_READER_PASSWORD"),
+		DBReaderHost:     getEnv("DB_READER_HOST"),
+		DBReaderPort:     getEnv("DB_READER_PORT"),
 	}
+
+	fmt.Printf("HERE IS THE APPCONFIG: %+v", AppConfig)
 }
 
 func getEnv(key string) string {

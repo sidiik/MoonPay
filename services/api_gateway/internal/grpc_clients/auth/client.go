@@ -3,16 +3,16 @@ package auth
 import (
 	"log/slog"
 
-	pb "github.com/sidiik/moonpay/api_gateway/internal/grpc_clients/auth/proto"
+	"github.com/sidiik/moonpay/api_gateway/internal/grpc_clients/auth/authpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func NewAuthClient(conn *grpc.ClientConn) pb.AuthServiceClient {
-	return pb.NewAuthServiceClient(conn)
+func NewAuthClient(conn *grpc.ClientConn) authpb.AuthServiceClient {
+	return authpb.NewAuthServiceClient(conn)
 }
 
-func ConnectAuthService(address string) pb.AuthServiceClient {
+func ConnectAuthService(address string) authpb.AuthServiceClient {
 	slog.Info("Connecting auth service grpc client")
 	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

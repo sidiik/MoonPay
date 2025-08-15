@@ -3,23 +3,37 @@ package handler
 import (
 	"context"
 
+	"github.com/sidiik/moonpay/auth_service/internal/services"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type AuthServer struct {
+	service *services.AuthService
 	authpb.UnimplementedAuthServiceServer
 }
 
-func NewAuthServer() *AuthServer {
-	return &AuthServer{}
+func NewAuthServerHandler(svc *services.AuthService) *AuthServer {
+	return &AuthServer{
+		service: svc,
+	}
 }
 
 func (s *AuthServer) Login(ctx context.Context, req *authpb.LoginRequest) (*authpb.LoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+	resp, err := s.service.SignIn(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }
 
-func (s *AuthServer) Signup(context.Context, *authpb.SignupRequest) (*authpb.SignupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+func (s *AuthServer) Signup(ctx context.Context, req *authpb.SignupRequest) (*authpb.SignupResponse, error) {
+	user, err := s.service.SignUp(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return &authpb.SignupResponse{
+		Email: user.Email,
+	}, nil
 }

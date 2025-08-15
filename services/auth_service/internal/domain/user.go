@@ -1,20 +1,21 @@
 package domain
 
-import "time"
+import (
+	"context"
+
+	"gorm.io/gorm"
+)
 
 type User struct {
-	ID        string    `json:"id"`
-	Username  string    `json:"userName"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	gorm.Model
+	Username string
+	FullName string
+	Email    string `gorm:"unqiueIdx"`
+	Password string
 }
 
 type UserRepository interface {
-	RegisterUser(user *User) error
-}
-
-type UserService interface {
-	RegisterUser(user *User) error
+	CreateUser(ctx context.Context, user *User) error
+	GetUserByEmail(ctx context.Context, email string) (*User, error)
+	GetUserByID(ctx context.Context, id int) (*User, error)
 }

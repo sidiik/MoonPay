@@ -4,15 +4,14 @@
 // 	protoc        v3.21.12
 // source: proto/auth.proto
 
-package pb
+package authpb
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -234,7 +233,7 @@ var File_proto_auth_proto protoreflect.FileDescriptor
 
 const file_proto_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/auth.proto\x12\x04auth\"@\n" +
+	"\x10proto/auth.proto\x12\x06authpb\"@\n" +
 	"\fLoginRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"]\n" +
@@ -246,10 +245,10 @@ const file_proto_auth_proto_rawDesc = "" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\"\n" +
 	"\frefreshToken\x18\x02 \x01(\tR\frefreshToken\"&\n" +
 	"\x0eSignupResponse\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email2t\n" +
-	"\vAuthService\x120\n" +
-	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x123\n" +
-	"\x06Signup\x12\x13.auth.SignupRequest\x1a\x14.auth.SignupResponseBBZ@github.com/sidiik/moonpay/auth_service/internal/delivery/grpc;pbb\x06proto3"
+	"\x05email\x18\x01 \x01(\tR\x05email2|\n" +
+	"\vAuthService\x124\n" +
+	"\x05Login\x12\x14.authpb.LoginRequest\x1a\x15.authpb.LoginResponse\x127\n" +
+	"\x06Signup\x12\x15.authpb.SignupRequest\x1a\x16.authpb.SignupResponseB6Z4github.com/sidiik/moonpay/auth_service/authpb;authpbb\x06proto3"
 
 var (
 	file_proto_auth_proto_rawDescOnce sync.Once
@@ -265,16 +264,16 @@ func file_proto_auth_proto_rawDescGZIP() []byte {
 
 var file_proto_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_auth_proto_goTypes = []any{
-	(*LoginRequest)(nil),   // 0: auth.LoginRequest
-	(*SignupRequest)(nil),  // 1: auth.SignupRequest
-	(*LoginResponse)(nil),  // 2: auth.LoginResponse
-	(*SignupResponse)(nil), // 3: auth.SignupResponse
+	(*LoginRequest)(nil),   // 0: authpb.LoginRequest
+	(*SignupRequest)(nil),  // 1: authpb.SignupRequest
+	(*LoginResponse)(nil),  // 2: authpb.LoginResponse
+	(*SignupResponse)(nil), // 3: authpb.SignupResponse
 }
 var file_proto_auth_proto_depIdxs = []int32{
-	0, // 0: auth.AuthService.Login:input_type -> auth.LoginRequest
-	1, // 1: auth.AuthService.Signup:input_type -> auth.SignupRequest
-	2, // 2: auth.AuthService.Login:output_type -> auth.LoginResponse
-	3, // 3: auth.AuthService.Signup:output_type -> auth.SignupResponse
+	0, // 0: authpb.AuthService.Login:input_type -> authpb.LoginRequest
+	1, // 1: authpb.AuthService.Signup:input_type -> authpb.SignupRequest
+	2, // 2: authpb.AuthService.Login:output_type -> authpb.LoginResponse
+	3, // 3: authpb.AuthService.Signup:output_type -> authpb.SignupResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
