@@ -13,7 +13,7 @@
 - **Language:** Go
 - **Communication:** gRPC, REST (HTTP/JSON), WebSocket
 - **Database:** MongoDB / PostgreSQL (can be configured per service)
-- **Messaging:** RabbitMQ / Kafka (optional, for event-driven workflows)
+- **Messaging:** RabbitMQ / Kafka
 - **Authentication:** JWT
 
 ## Getting Started
