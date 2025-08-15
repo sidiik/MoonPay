@@ -35,6 +35,11 @@
    ```bash
    1. git clone https://github.com/sidiik/MoonPay.git
    2. cd MoonPay
-   3. tilt up - to start the services
-   4. tilt down - to stop the services
+   ```
+
+3. **Run Services:**
+   - Use Tilt to manage the services:
+   ```bash
+   1. tilt up - to start the services
+   2. tilt down - to stop the services
    ```
