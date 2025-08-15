@@ -19,6 +19,7 @@
 ## Getting Started
 
 1. **Install Dependencies:**
+
    - Ensure you have Go installed.
    - Install Tilt for local development:
      ```bash
@@ -28,6 +29,7 @@
    - Install Docker for container management.
    - Minikube or Kubernetes cluster for local development.
    - kubectl command-line tool for interacting with your cluster.
+
 2. **Clone the repository:**
 
    ```bash
@@ -35,8 +37,4 @@
    2. cd MoonPay
    3. tilt up - to start the services
    4. tilt down - to stop the services
-   ```
-
-   ```
-
    ```
