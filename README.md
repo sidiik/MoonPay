@@ -18,8 +18,19 @@
 
 ## Getting Started
 
-1. **Clone the repository:**
+1. **Install Dependencies:**
+   - Ensure you have Go installed.
+   - Install Tilt for local development:
+     ```bash
+     1. curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+     2. tilt version
+     ```
+   - Install Docker for container management.
+   - Minikube or Kubernetes cluster for local development.
+   - kubectl command-line tool for interacting with your cluster.
+2. **Clone the repository:**
    ```bash
-   git clone https://github.com/sidiik/MoonPay.git
-   cd MoonPay
+   1. git clone https://github.com/sidiik/MoonPay.git
+   2. cd MoonPay
+   3. tilt up
    ```
