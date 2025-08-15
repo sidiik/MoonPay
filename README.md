@@ -6,6 +6,12 @@
 
 ---
 
+## Contributors
+
+- [sidiik](https://github.com/sidiik) - Sidiiq Omar (sidiik)
+
+---
+
 ## Tech Stack
 
 - **Language:** Go
