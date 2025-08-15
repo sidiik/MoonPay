@@ -24,6 +24,12 @@ type Config struct {
 	DBReaderPassword string
 	DBReaderHost     string
 	DBReaderPort     string
+
+	// JWT
+	AccessTokenSecret  string
+	RefreshTokenSecret string
+	AccessTokenExpire  string
+	RefreshTokenExpire string
 }
 
 var AppConfig Config
@@ -44,6 +50,11 @@ func InitConfig() {
 		DBReaderPassword: getEnv("DB_READER_PASSWORD"),
 		DBReaderHost:     getEnv("DB_READER_HOST"),
 		DBReaderPort:     getEnv("DB_READER_PORT"),
+
+		AccessTokenSecret:  getEnv("ACCESS_TOKEN_SECRET"),
+		RefreshTokenSecret: getEnv("REFRESH_TOKEN_SECRET"),
+		AccessTokenExpire:  getEnv("ACCESS_TOKEN_EXPIRE"),
+		RefreshTokenExpire: getEnv("REFRESH_TOKEN_EXPIRE"),
 	}
 
 	fmt.Printf("HERE IS THE APPCONFIG: %+v", AppConfig)

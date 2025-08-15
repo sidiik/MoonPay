@@ -9,8 +9,8 @@ var (
 	ErrConflict       = "conflict"
 
 	// Auth-specific errors
-	ErrEmailAlreadyExists = "email already exists"
-	ErrInvalidCredentials = "invalid email or password"
-	ErrTokenExpired       = "token has expired"
-	ErrInvalidToken       = "invalid token"
+	ErrEmailAlreadyExists = "Email already exists"
+	ErrInvalidCredentials = "Invalid email or password"
+	ErrTokenExpired       = "Token has expired"
+	ErrInvalidToken       = "Invalid token"
 )

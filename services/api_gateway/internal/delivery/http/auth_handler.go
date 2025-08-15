@@ -57,9 +57,11 @@ func (h *AuthHandler) Signup(c *gin.Context) {
 		FullName: body.FullName,
 	})
 
+	s, _ := status.FromError(err)
+
 	if err != nil {
 		slog.Warn("error from auth grpc service", "error", err)
-		pkg.SendResponse(c, http.StatusUnauthorized, constants.ErrUnauthorized, "", nil, errors.New(constants.ErrInternal))
+		pkg.SendResponse(c, http.StatusUnauthorized, s.Code().String(), "", nil, errors.New(s.Message()))
 		return
 	}
 

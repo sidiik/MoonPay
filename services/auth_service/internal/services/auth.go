@@ -8,6 +8,7 @@ import (
 	"github.com/sidiik/moonpay/auth_service/internal/constants"
 	"github.com/sidiik/moonpay/auth_service/internal/domain"
 	"github.com/sidiik/moonpay/auth_service/internal/repository"
+	"github.com/sidiik/moonpay/auth_service/internal/utils"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
@@ -66,13 +67,25 @@ func (s *AuthService) SignIn(ctx context.Context, data *authpb.LoginRequest) (*a
 
 	slog.Info("Check if the password is correct")
 	if err := bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(data.Password)); err != nil {
-		slog.Error("incorrect password", "email", data.Email, "error", constants.ErrInvalidCredentials)
+		slog.Error("incorrect password", "email", data.Email, "error", err)
 		return nil, status.Error(codes.Unauthenticated, constants.ErrInvalidCredentials)
 	}
 
+	accessToken, err := utils.GenerateAccessToken(existingUser.Email)
+	if err != nil {
+		slog.Error("failed to generate access token", "error", err)
+		return nil, status.Error(codes.Internal, constants.ErrInternalServer)
+	}
+
+	refreshToken, err := utils.GenerateRefreshToken(existingUser.Email)
+	if err != nil {
+		slog.Error("failed to generate refresh token", "error", err)
+		return nil, status.Error(codes.Internal, constants.ErrInternalServer)
+	}
+
 	return &authpb.LoginResponse{
-		AccessToken:  "ACCESS-TOKEN",
-		RefreshToken: "REFRESH-TOKEN",
+		AccessToken:  *accessToken,
+		RefreshToken: *refreshToken,
 	}, nil
 
 }
