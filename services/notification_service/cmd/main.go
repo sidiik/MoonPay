@@ -15,7 +15,7 @@ func main() {
 	appConfig := config.AppConfig
 
 	slog.Info("Initializing email service")
-	emailService := services.NewEmailService(appConfig.SmtpHost, appConfig.SmtpPort, appConfig.Email, appConfig.EmailPassword)
+	emailService := services.NewEmailService(appConfig.SmtpHost, appConfig.SmtpPort, appConfig.EmailUsername, appConfig.EmailPassword)
 
 	slog.Info("initializing auth_consumer")
 	authConsumer, err := rabbitmq.NewConsumer(appConfig.RabbitMQUrl, "notifications", "auth_exchange")

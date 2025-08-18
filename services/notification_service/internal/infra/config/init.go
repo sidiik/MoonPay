@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	Email         string
+	EmailUsername string
 	EmailPassword string
 	SmtpHost      string
 	SmtpPort      string
@@ -23,7 +23,7 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	AppConfig = Config{
-		Email:         getEnv("EMAIL_ADDRESS"),
+		EmailUsername: getEnv("EMAIL_ADDRESS"),
 		EmailPassword: getEnv("EMAIL_PASSWORD"),
 		RabbitMQUrl:   getEnv("RABBITMQ_URL"),
 		SmtpHost:      getEnv("SMTP_HOST"),
