@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 
@@ -30,6 +29,9 @@ type Config struct {
 	RefreshTokenSecret string
 	AccessTokenExpire  string
 	RefreshTokenExpire string
+
+	// RabbitMQ
+	RabbitMQUrl string
 }
 
 var AppConfig Config
@@ -55,9 +57,10 @@ func InitConfig() {
 		RefreshTokenSecret: getEnv("REFRESH_TOKEN_SECRET"),
 		AccessTokenExpire:  getEnv("ACCESS_TOKEN_EXPIRE"),
 		RefreshTokenExpire: getEnv("REFRESH_TOKEN_EXPIRE"),
+
+		RabbitMQUrl: getEnv("RABBITMQ_URL"),
 	}
 
-	fmt.Printf("HERE IS THE APPCONFIG: %+v", AppConfig)
 }
 
 func getEnv(key string) string {

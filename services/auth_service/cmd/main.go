@@ -12,6 +12,7 @@ import (
 	handler "github.com/sidiik/moonpay/auth_service/internal/delivery/grpc"
 	"github.com/sidiik/moonpay/auth_service/internal/infra/config"
 	"github.com/sidiik/moonpay/auth_service/internal/infra/db"
+	"github.com/sidiik/moonpay/auth_service/internal/infra/rabbitmq"
 	"github.com/sidiik/moonpay/auth_service/internal/repository"
 	"github.com/sidiik/moonpay/auth_service/internal/services"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
@@ -29,14 +30,24 @@ func main() {
 		return
 	}
 
-	authRepo := repository.NewAuthRepository(conns)
-	authService := services.NewAuthService(authRepo)
-
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.AppConfig.Port))
 	if err != nil {
 		slog.Error("failed to start auth service", "error", err)
 		return
 	}
+
+	// Initialize rabbitmq
+	r, err := rabbitmq.NewRabbitMQ(config.AppConfig.RabbitMQUrl)
+	if err != nil {
+		slog.Error("failed to connect to rabbitmq", "error", err)
+		return
+	}
+
+	// Initialize auth service and repo
+	authRepo := repository.NewAuthRepository(conns)
+	authService := services.NewAuthService(authRepo, r)
+
+	defer r.Close()
 
 	grpcServer := grpc.NewServer()
 

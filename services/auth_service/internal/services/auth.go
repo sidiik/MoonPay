@@ -2,11 +2,13 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"log/slog"
 	"strings"
 
 	"github.com/sidiik/moonpay/auth_service/internal/constants"
 	"github.com/sidiik/moonpay/auth_service/internal/domain"
+	"github.com/sidiik/moonpay/auth_service/internal/infra/rabbitmq"
 	"github.com/sidiik/moonpay/auth_service/internal/repository"
 	"github.com/sidiik/moonpay/auth_service/internal/utils"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
@@ -17,11 +19,13 @@ import (
 
 type AuthService struct {
 	authRepo *repository.AuthRepository
+	rabbit   *rabbitmq.RabbitMQ
 }
 
-func NewAuthService(authRepo *repository.AuthRepository) *AuthService {
+func NewAuthService(authRepo *repository.AuthRepository, rabbit *rabbitmq.RabbitMQ) *AuthService {
 	return &AuthService{
 		authRepo: authRepo,
+		rabbit:   rabbit,
 	}
 }
 
@@ -51,6 +55,22 @@ func (s *AuthService) SignUp(ctx context.Context, data *authpb.SignupRequest) (*
 
 	if err := s.authRepo.CreateUser(ctx, user); err != nil {
 		slog.Error("failed to create user", "email", data.Email, "error", err)
+	}
+
+	event := map[string]any{
+		"event":     "user.registered",
+		"email":     user.Email,
+		"full_name": user.FullName,
+	}
+
+	body, err := json.Marshal(event)
+	if err != nil {
+		slog.Error("failed to marshal rabbitmq event")
+	}
+
+	slog.Info("Publish user.registered event")
+	if err := s.rabbit.Publish("user.registered", body); err != nil {
+		slog.Error("failed to publish event", "error", err)
 	}
 
 	return &user, nil

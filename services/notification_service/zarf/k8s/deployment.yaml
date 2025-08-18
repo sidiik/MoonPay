@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: notification-service
+  name: notification-service
+  namespace: moonpay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: notification-service-configmap
+            - secretRef:
+                name: notification-service-secrets
+          image: notification-service
+          name: notification-service
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: notification-service
+  name: notification-service
+  namespace: moonpay
+spec:
+  ports:
+    - name: 8081-50051
+      port: 80
+      protocol: TCP
+      targetPort: 50051
+  selector:
+    app: notification-service
+  type: ClusterIP
