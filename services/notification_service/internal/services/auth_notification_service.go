@@ -32,9 +32,9 @@ func (s *AuthNotificationService) HandleUserRegisteredEvent(event map[string]any
 	slog.Info("User registered event triggered")
 	slog.Info("Sending welcome message")
 
-	subject := "🎉 Welcome to MoonPay, " + event["Name"].(string) + "!"
+	subject := "🎉 Welcome to MoonPay, " + event["full_name"].(string) + "!"
 
-	body := "Hi " + event["Name"].(string) + ",<br><br>" +
+	body := "Hi " + event["full_name"].(string) + ",<br><br>" +
 		"Welcome to <b>MoonPay</b>! 🚀<br>" +
 		"We're excited to have you join us and can’t wait for you to start exploring.<br><br>" +
 		"If you have any questions, our team is always here to help.<br><br>" +
