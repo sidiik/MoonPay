@@ -32,6 +32,9 @@ type Config struct {
 
 	// RabbitMQ
 	RabbitMQUrl string
+
+	// OTP
+	OtpCodeExpire string
 }
 
 var AppConfig Config
@@ -40,7 +43,9 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	AppConfig = Config{
-		Port:             getEnv("PORT"),
+		Port:          getEnv("PORT"),
+		OtpCodeExpire: getEnv("OTP_CODE_EXPIRE"),
+
 		DBWriterName:     getEnv("DB_WRITER_NAME"),
 		DBWriterUser:     getEnv("DB_WRITER_USER"),
 		DBWriterPassword: getEnv("DB_WRITER_PASSWORD"),

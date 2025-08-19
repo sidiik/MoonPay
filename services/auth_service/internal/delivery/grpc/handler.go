@@ -5,21 +5,24 @@ import (
 
 	"github.com/sidiik/moonpay/auth_service/internal/services"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type AuthServer struct {
-	service *services.AuthService
+	userService *services.UserService
+	otpService  *services.OtpService
 	authpb.UnimplementedAuthServiceServer
 }
 
-func NewAuthServerHandler(svc *services.AuthService) *AuthServer {
+func NewAuthServerHandler(userService *services.UserService, otpService *services.OtpService) *AuthServer {
 	return &AuthServer{
-		service: svc,
+		userService: userService,
+		otpService:  otpService,
 	}
 }
 
 func (s *AuthServer) Login(ctx context.Context, req *authpb.LoginRequest) (*authpb.LoginResponse, error) {
-	resp, err := s.service.SignIn(ctx, req)
+	resp, err := s.userService.SignIn(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +31,7 @@ func (s *AuthServer) Login(ctx context.Context, req *authpb.LoginRequest) (*auth
 }
 
 func (s *AuthServer) Signup(ctx context.Context, req *authpb.SignupRequest) (*authpb.SignupResponse, error) {
-	user, err := s.service.SignUp(ctx, req)
+	user, err := s.userService.SignUp(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -36,4 +39,22 @@ func (s *AuthServer) Signup(ctx context.Context, req *authpb.SignupRequest) (*au
 	return &authpb.SignupResponse{
 		Email: user.Email,
 	}, nil
+}
+
+func (s *AuthServer) RequestPasswordReset(ctx context.Context, req *authpb.RequestPasswordResetRequest) (*emptypb.Empty, error) {
+	err := s.otpService.RequestPasswordReset(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func (s *AuthServer) ResetPassword(ctx context.Context, req *authpb.ResetPasswordRequest) (*emptypb.Empty, error) {
+	err := s.otpService.ResetPassword(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }

@@ -7,5 +7,7 @@ data:
   PORT: '50051'
   APP_ENV: 'production'
   LOG_LEVEL: 'info'
-  ACCESS_TOKEN_EXPIRE: '1'
-  REFRESH_TOKEN_EXPIRE: '72'
+  ACCESS_TOKEN_EXPIRE: '1' # in hours
+  REFRESH_TOKEN_EXPIRE: '72' # in hours
+  OTP_CODE_EXPIRE: '5' # in minutes
+

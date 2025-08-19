@@ -4,9 +4,24 @@ package authpb;
 
 option go_package = "github.com/sidiik/moonpay/auth_service/authpb;authpb";
 
+import "google/protobuf/empty.proto";
+
 service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse);
     rpc Signup (SignupRequest) returns (SignupResponse);
+    rpc RequestPasswordReset(RequestPasswordResetRequest) returns (google.protobuf.Empty);
+    rpc ResetPassword(ResetPasswordRequest) returns (google.protobuf.Empty);
+
+}
+
+message ResetPasswordRequest {
+    string code = 1;
+    string email = 2;
+    string newPassword  = 3;
+} 
+
+message RequestPasswordResetRequest {
+    string email = 1;
 }
 
 message LoginRequest {
