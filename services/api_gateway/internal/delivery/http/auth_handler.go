@@ -30,6 +30,8 @@ func NewAuthHandler(client authpb.AuthServiceClient, validator *validator.Valida
 	{
 		auth.POST("/signup", handler.Signup)
 		auth.POST("/signin", handler.Signin)
+		auth.POST("/request-password-reset", handler.RequestPasswordReset)
+		auth.POST("/reset-password", handler.ResetPassword)
 	}
 
 }
@@ -38,13 +40,13 @@ func (h *AuthHandler) Signup(c *gin.Context) {
 	var body dto.SignupRequest
 
 	if err := c.ShouldBindJSON(&body); err != nil {
-		slog.Warn("failed to parse body", "error", err)
+		slog.Error("failed to parse body", "error", err)
 		pkg.SendResponse(c, http.StatusBadRequest, constants.ErrInvalidRequest, "", nil, err)
 		return
 	}
 
 	if err := h.validator.Struct(&body); err != nil {
-		slog.Warn("failed to parse body", "error", err)
+		slog.Error("failed to parse body", "error", err)
 		pkg.SendResponse(c, http.StatusBadRequest, constants.ErrInvalidRequest, "", nil, err)
 		return
 	}
@@ -60,7 +62,7 @@ func (h *AuthHandler) Signup(c *gin.Context) {
 	s, _ := status.FromError(err)
 
 	if err != nil {
-		slog.Warn("error from auth grpc service", "error", err)
+		slog.Error("error from auth grpc service", "error", err)
 		pkg.SendResponse(c, http.StatusUnauthorized, s.Code().String(), "", nil, errors.New(s.Message()))
 		return
 	}
@@ -73,13 +75,13 @@ func (h *AuthHandler) Signin(c *gin.Context) {
 	var body dto.SigninRequest
 
 	if err := c.ShouldBindJSON(&body); err != nil {
-		slog.Warn("failed to parse body", "error", err)
+		slog.Error("failed to parse body", "error", err)
 		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
 		return
 	}
 
 	if err := h.validator.Struct(&body); err != nil {
-		slog.Warn("failed to parse body", "error", err)
+		slog.Error("failed to parse body", "error", err)
 		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
 		return
 	}
@@ -94,11 +96,75 @@ func (h *AuthHandler) Signin(c *gin.Context) {
 	s, _ := status.FromError(err)
 
 	if err != nil {
-		slog.Warn("error from auth grpc service", "error", err)
+		slog.Error("error from auth grpc service", "error", err)
 		pkg.SendResponse(c, http.StatusUnauthorized, s.Code().String(), "", nil, errors.New(s.Message()))
 		return
 	}
 
 	pkg.SendResponse(c, http.StatusOK, "", "", resp, nil)
 
+}
+
+func (h *AuthHandler) RequestPasswordReset(c *gin.Context) {
+	var body dto.RequestResetPasswordRequest
+	if err := c.ShouldBindJSON(&body); err != nil {
+		slog.Error("failed to parse body", "error", err)
+		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
+		return
+	}
+
+	if err := h.validator.Struct(&body); err != nil {
+		slog.Error("failed to validate body", "error", err)
+		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
+		return
+	}
+
+	ctx := c.Request.Context()
+
+	resp, err := h.authClient.RequestPasswordReset(ctx, &authpb.RequestPasswordResetRequest{
+		Email: body.Email,
+	})
+
+	s, _ := status.FromError(err)
+
+	if err != nil {
+		slog.Error("failed to request password reset", "error", err)
+		pkg.SendResponse(c, http.StatusUnauthorized, s.Code().String(), "", nil, errors.New(s.Message()))
+		return
+	}
+
+	pkg.SendResponse(c, http.StatusOK, "", "", resp, nil)
+}
+
+func (h *AuthHandler) ResetPassword(c *gin.Context) {
+	var body dto.ResetPasswordRequest
+	if err := c.ShouldBindJSON(&body); err != nil {
+		slog.Error("failed to parse body", "error", err)
+		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
+		return
+	}
+
+	if err := h.validator.Struct(&body); err != nil {
+		slog.Error("failed to validate body", "error", err)
+		pkg.SendResponse(c, http.StatusBadRequest, "", "", nil, err)
+		return
+	}
+
+	ctx := c.Request.Context()
+
+	resp, err := h.authClient.ResetPassword(ctx, &authpb.ResetPasswordRequest{
+		Email:       body.Email,
+		Code:        body.Code,
+		NewPassword: body.NewPassword,
+	})
+
+	s, _ := status.FromError(err)
+
+	if err != nil {
+		slog.Error("failed to request password reset", "error", err)
+		pkg.SendResponse(c, http.StatusUnauthorized, s.Code().String(), "", nil, errors.New(s.Message()))
+		return
+	}
+
+	pkg.SendResponse(c, http.StatusOK, "", "", resp, nil)
 }

@@ -4,8 +4,9 @@ metadata:
   name: notification-service-configmap
   namespace: moonpay
 data:
+  APP_NAME: 'MoonPay'
   PORT: '50052'
-  APP_ENV: 'production'
+  APP_ENV: 'development'
   LOG_LEVEL: 'info'
   ACCESS_TOKEN_EXPIRE: '1'
   REFRESH_TOKEN_EXPIRE: '72'

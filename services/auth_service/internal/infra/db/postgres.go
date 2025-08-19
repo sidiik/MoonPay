@@ -45,9 +45,7 @@ func NewPostgres() (*DBConnections, error) {
 	}
 
 	// Auto migrate schema
-	if err := writerDb.AutoMigrate(&domain.User{}); err != nil {
-		return nil, err
-	}
+	AutoMigrate(writerDb)
 
 	slog.Info("Writer and Reader DB connected successfully")
 
@@ -55,4 +53,13 @@ func NewPostgres() (*DBConnections, error) {
 		Writer: writerDb,
 		Reader: readerDB,
 	}, nil
+}
+
+func AutoMigrate(writerDb *gorm.DB) error {
+	err := writerDb.AutoMigrate(&domain.User{}, &domain.Otp{})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
