@@ -10,7 +10,9 @@ import (
 	"github.com/sidiik/moonpay/api_gateway/internal/constants"
 	"github.com/sidiik/moonpay/api_gateway/internal/dto"
 	"github.com/sidiik/moonpay/api_gateway/internal/grpc_clients/auth/authpb"
+	"github.com/sidiik/moonpay/api_gateway/internal/middleware"
 	"github.com/sidiik/moonpay/api_gateway/pkg"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
@@ -32,6 +34,7 @@ func NewAuthHandler(client authpb.AuthServiceClient, validator *validator.Valida
 		auth.POST("/signin", handler.Signin)
 		auth.POST("/request-password-reset", handler.RequestPasswordReset)
 		auth.POST("/reset-password", handler.ResetPassword)
+		auth.GET("/whoami", middleware.Authenticate(handler.authClient), handler.WhoAmI)
 	}
 
 }
@@ -167,4 +170,9 @@ func (h *AuthHandler) ResetPassword(c *gin.Context) {
 	}
 
 	pkg.SendResponse(c, http.StatusOK, "", "", resp, nil)
+}
+
+func (h *AuthHandler) WhoAmI(c *gin.Context) {
+	user := c.MustGet("user").(*authpb.GetUserByEmailResponse)
+	pkg.SendResponse(c, http.StatusOK, codes.OK.String(), "", user, nil)
 }

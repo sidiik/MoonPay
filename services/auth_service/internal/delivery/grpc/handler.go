@@ -58,3 +58,12 @@ func (s *AuthServer) ResetPassword(ctx context.Context, req *authpb.ResetPasswor
 
 	return nil, nil
 }
+
+func (s *AuthServer) GetUserByEmail(ctx context.Context, req *authpb.GetUserByEmailRequest) (*authpb.GetUserByEmailResponse, error) {
+	resp, err := s.userService.GetUserByEmail(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}

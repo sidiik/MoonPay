@@ -5,12 +5,14 @@ package authpb;
 option go_package = "github.com/sidiik/moonpay/auth_service/authpb;authpb";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse);
     rpc Signup (SignupRequest) returns (SignupResponse);
     rpc RequestPasswordReset(RequestPasswordResetRequest) returns (google.protobuf.Empty);
     rpc ResetPassword(ResetPasswordRequest) returns (google.protobuf.Empty);
+    rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
 
 }
 
@@ -42,4 +44,16 @@ message LoginResponse {
 
 message SignupResponse {
     string email = 1; 
+}
+
+message GetUserByEmailRequest {
+string email = 1;
+}
+
+message GetUserByEmailResponse {
+    uint64 id = 1;
+    string email = 2;
+    string fullName = 3;
+    google.protobuf.Timestamp createdAt = 4;
+    google.protobuf.Timestamp  updatedAt = 5;
 }

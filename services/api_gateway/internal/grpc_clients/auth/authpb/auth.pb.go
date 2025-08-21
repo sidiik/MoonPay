@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -334,11 +335,131 @@ func (x *SignupResponse) GetEmail() string {
 	return ""
 }
 
+type GetUserByEmailRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByEmailRequest) Reset() {
+	*x = GetUserByEmailRequest{}
+	mi := &file_proto_auth_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByEmailRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByEmailRequest) ProtoMessage() {}
+
+func (x *GetUserByEmailRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_auth_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByEmailRequest.ProtoReflect.Descriptor instead.
+func (*GetUserByEmailRequest) Descriptor() ([]byte, []int) {
+	return file_proto_auth_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetUserByEmailRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type GetUserByEmailResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	FullName      string                 `protobuf:"bytes,3,opt,name=fullName,proto3" json:"fullName,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByEmailResponse) Reset() {
+	*x = GetUserByEmailResponse{}
+	mi := &file_proto_auth_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByEmailResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByEmailResponse) ProtoMessage() {}
+
+func (x *GetUserByEmailResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_auth_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByEmailResponse.ProtoReflect.Descriptor instead.
+func (*GetUserByEmailResponse) Descriptor() ([]byte, []int) {
+	return file_proto_auth_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetUserByEmailResponse) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *GetUserByEmailResponse) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *GetUserByEmailResponse) GetFullName() string {
+	if x != nil {
+		return x.FullName
+	}
+	return ""
+}
+
+func (x *GetUserByEmailResponse) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *GetUserByEmailResponse) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 var File_proto_auth_proto protoreflect.FileDescriptor
 
 const file_proto_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/auth.proto\x12\x06authpb\x1a\x1bgoogle/protobuf/empty.proto\"b\n" +
+	"\x10proto/auth.proto\x12\x06authpb\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"b\n" +
 	"\x14ResetPasswordRequest\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12 \n" +
@@ -356,12 +477,21 @@ const file_proto_auth_proto_rawDesc = "" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\"\n" +
 	"\frefreshToken\x18\x02 \x01(\tR\frefreshToken\"&\n" +
 	"\x0eSignupResponse\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email2\x98\x02\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"-\n" +
+	"\x15GetUserByEmailRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"\xce\x01\n" +
+	"\x16GetUserByEmailResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
+	"\bfullName\x18\x03 \x01(\tR\bfullName\x128\n" +
+	"\tcreatedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x128\n" +
+	"\tupdatedAt\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt2\xe9\x02\n" +
 	"\vAuthService\x124\n" +
 	"\x05Login\x12\x14.authpb.LoginRequest\x1a\x15.authpb.LoginResponse\x127\n" +
 	"\x06Signup\x12\x15.authpb.SignupRequest\x1a\x16.authpb.SignupResponse\x12S\n" +
 	"\x14RequestPasswordReset\x12#.authpb.RequestPasswordResetRequest\x1a\x16.google.protobuf.Empty\x12E\n" +
-	"\rResetPassword\x12\x1c.authpb.ResetPasswordRequest\x1a\x16.google.protobuf.EmptyB6Z4github.com/sidiik/moonpay/auth_service/authpb;authpbb\x06proto3"
+	"\rResetPassword\x12\x1c.authpb.ResetPasswordRequest\x1a\x16.google.protobuf.Empty\x12O\n" +
+	"\x0eGetUserByEmail\x12\x1d.authpb.GetUserByEmailRequest\x1a\x1e.authpb.GetUserByEmailResponseB6Z4github.com/sidiik/moonpay/auth_service/authpb;authpbb\x06proto3"
 
 var (
 	file_proto_auth_proto_rawDescOnce sync.Once
@@ -375,7 +505,7 @@ func file_proto_auth_proto_rawDescGZIP() []byte {
 	return file_proto_auth_proto_rawDescData
 }
 
-var file_proto_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_auth_proto_goTypes = []any{
 	(*ResetPasswordRequest)(nil),        // 0: authpb.ResetPasswordRequest
 	(*RequestPasswordResetRequest)(nil), // 1: authpb.RequestPasswordResetRequest
@@ -383,22 +513,29 @@ var file_proto_auth_proto_goTypes = []any{
 	(*SignupRequest)(nil),               // 3: authpb.SignupRequest
 	(*LoginResponse)(nil),               // 4: authpb.LoginResponse
 	(*SignupResponse)(nil),              // 5: authpb.SignupResponse
-	(*emptypb.Empty)(nil),               // 6: google.protobuf.Empty
+	(*GetUserByEmailRequest)(nil),       // 6: authpb.GetUserByEmailRequest
+	(*GetUserByEmailResponse)(nil),      // 7: authpb.GetUserByEmailResponse
+	(*timestamppb.Timestamp)(nil),       // 8: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),               // 9: google.protobuf.Empty
 }
 var file_proto_auth_proto_depIdxs = []int32{
-	2, // 0: authpb.AuthService.Login:input_type -> authpb.LoginRequest
-	3, // 1: authpb.AuthService.Signup:input_type -> authpb.SignupRequest
-	1, // 2: authpb.AuthService.RequestPasswordReset:input_type -> authpb.RequestPasswordResetRequest
-	0, // 3: authpb.AuthService.ResetPassword:input_type -> authpb.ResetPasswordRequest
-	4, // 4: authpb.AuthService.Login:output_type -> authpb.LoginResponse
-	5, // 5: authpb.AuthService.Signup:output_type -> authpb.SignupResponse
-	6, // 6: authpb.AuthService.RequestPasswordReset:output_type -> google.protobuf.Empty
-	6, // 7: authpb.AuthService.ResetPassword:output_type -> google.protobuf.Empty
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	8, // 0: authpb.GetUserByEmailResponse.createdAt:type_name -> google.protobuf.Timestamp
+	8, // 1: authpb.GetUserByEmailResponse.updatedAt:type_name -> google.protobuf.Timestamp
+	2, // 2: authpb.AuthService.Login:input_type -> authpb.LoginRequest
+	3, // 3: authpb.AuthService.Signup:input_type -> authpb.SignupRequest
+	1, // 4: authpb.AuthService.RequestPasswordReset:input_type -> authpb.RequestPasswordResetRequest
+	0, // 5: authpb.AuthService.ResetPassword:input_type -> authpb.ResetPasswordRequest
+	6, // 6: authpb.AuthService.GetUserByEmail:input_type -> authpb.GetUserByEmailRequest
+	4, // 7: authpb.AuthService.Login:output_type -> authpb.LoginResponse
+	5, // 8: authpb.AuthService.Signup:output_type -> authpb.SignupResponse
+	9, // 9: authpb.AuthService.RequestPasswordReset:output_type -> google.protobuf.Empty
+	9, // 10: authpb.AuthService.ResetPassword:output_type -> google.protobuf.Empty
+	7, // 11: authpb.AuthService.GetUserByEmail:output_type -> authpb.GetUserByEmailResponse
+	7, // [7:12] is the sub-list for method output_type
+	2, // [2:7] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_auth_proto_init() }
@@ -412,7 +549,7 @@ func file_proto_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_auth_proto_rawDesc), len(file_proto_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
