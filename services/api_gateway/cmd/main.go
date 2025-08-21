@@ -6,9 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 	h "github.com/sidiik/moonpay/api_gateway/internal/delivery/http"
 	"github.com/sidiik/moonpay/api_gateway/internal/grpc_clients/auth"
+	"github.com/sidiik/moonpay/api_gateway/internal/infra/config"
 )
 
 func main() {
+	slog.Info("Initializing the config")
+	config.InitConfig()
+
 	slog.Info("Starting API Gateway")
 	r := gin.Default()
 

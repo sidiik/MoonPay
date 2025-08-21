@@ -35,6 +35,11 @@ type Config struct {
 
 	// OTP
 	OtpCodeExpire string
+
+	// REDIS
+	RedisAddr     string
+	RedisPassword string
+	RedisDb       string
 }
 
 var AppConfig Config
@@ -64,6 +69,9 @@ func InitConfig() {
 		RefreshTokenExpire: getEnv("REFRESH_TOKEN_EXPIRE"),
 
 		RabbitMQUrl: getEnv("RABBITMQ_URL"),
+		RedisAddr:   getEnv("REDIS_ADDR"),
+		// RedisPassword: getEnv("REDIS_PASSWORD"),
+		RedisDb: getEnv("REDIS_DB"),
 	}
 
 }

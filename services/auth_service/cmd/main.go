@@ -13,6 +13,7 @@ import (
 	"github.com/sidiik/moonpay/auth_service/internal/infra/db"
 	"github.com/sidiik/moonpay/auth_service/internal/infra/logger"
 	"github.com/sidiik/moonpay/auth_service/internal/infra/rabbitmq"
+	"github.com/sidiik/moonpay/auth_service/internal/infra/redis"
 	"github.com/sidiik/moonpay/auth_service/internal/repository"
 	"github.com/sidiik/moonpay/auth_service/internal/services"
 	authpb "github.com/sidiik/moonpay/auth_service/proto"
@@ -26,6 +27,10 @@ func main() {
 
 	log.Info("Initializing auth service env variables")
 	config.InitConfig()
+	appConfig := config.AppConfig
+
+	log.Info("Initializing redis db")
+	redisClient := redis.InitClient(appConfig)
 
 	log.Info("Initializing DB Connections")
 	conns, err := db.InitDb()
@@ -49,7 +54,7 @@ func main() {
 
 	// Initialize auth service and repo
 	userRepo := repository.NewUserRepository(conns)
-	userService := services.NewUserService(userRepo, r, log)
+	userService := services.NewUserService(userRepo, r, log, redisClient)
 
 	// Initialize otp service and repo
 	otpRepo := repository.NewOtpRepository(conns)

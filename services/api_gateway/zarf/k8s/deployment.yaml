@@ -26,6 +26,9 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          envFrom:
+            - secretRef:
+                name: api-gateway-service-secrets
 
 ---
 apiVersion: v1

@@ -1,6 +1,7 @@
 # API Gateway service
 k8s_yaml([
   'services/api_gateway/zarf/k8s/deployment.yaml',
+  'services/api_gateway/zarf/k8s/secret.yaml',
 ])
 
 docker_build('api-gateway', 'services/api_gateway', dockerfile='services/api_gateway/Dockerfile')
