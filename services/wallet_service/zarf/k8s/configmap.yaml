@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wallet-service-configmap
+  namespace: moonpay
+data:
+  PORT: '50053'
+  APP_ENV: 'production'
+  LOG_LEVEL: 'info'

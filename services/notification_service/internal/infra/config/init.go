@@ -25,7 +25,7 @@ func InitConfig() {
 
 	AppConfig = Config{
 		AppName:       getEnv("APP_NAME"),
-		EmailUsername: getEnv("EMAIL_ADDRESS"),
+		EmailUsername: getEnv("EMAIL_USERNAME"),
 		EmailPassword: getEnv("EMAIL_PASSWORD"),
 		RabbitMQUrl:   getEnv("RABBITMQ_URL"),
 		SmtpHost:      getEnv("SMTP_HOST"),

@@ -39,18 +39,14 @@ func main() {
 		return
 	}
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.AppConfig.Port))
-	if err != nil {
-		log.Error("failed to start auth service", "error", err)
-		return
-	}
-
 	// Initialize rabbitmq
-	r, err := rabbitmq.NewRabbitMQ(config.AppConfig.RabbitMQUrl)
+	r, err := rabbitmq.NewRabbitMQ(appConfig.RabbitMQUrl)
 	if err != nil {
 		log.Error("failed to connect to rabbitmq", "error", err)
 		return
 	}
+
+	defer r.Close()
 
 	// Initialize auth service and repo
 	userRepo := repository.NewUserRepository(conns)
@@ -60,13 +56,17 @@ func main() {
 	otpRepo := repository.NewOtpRepository(conns)
 	otpService := services.NewOtpService(otpRepo, userRepo, r, log)
 
-	defer r.Close()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", appConfig.Port))
+	if err != nil {
+		log.Error("failed to start auth service", "error", err)
+		return
+	}
 
 	grpcServer := grpc.NewServer()
 
 	// Registering the auth service
 	authpb.RegisterAuthServiceServer(grpcServer, handler.NewAuthServerHandler(userService, otpService))
-	log.Info(fmt.Sprintf("🚀 gRPC AuthService running on :%s", config.AppConfig.Port))
+	log.Info(fmt.Sprintf("🚀 gRPC AuthService running on :%s", appConfig.Port))
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)

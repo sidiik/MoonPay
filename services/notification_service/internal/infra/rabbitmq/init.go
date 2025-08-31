@@ -108,6 +108,5 @@ func (r *Consumer) Start(handler func(event map[string]any) error) error {
 		}
 	}()
 
-	slog.Info("🚀 Notification service consuming events...")
-	select {}
+	return nil
 }

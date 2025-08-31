@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wallet-service
+  name: wallet-service
+  namespace: moonpay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallet-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: wallet-service
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: wallet-service-configmap
+            - secretRef:
+                name: wallet-service-secrets
+          image: wallet-service
+          name: wallet-service
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wallet-service
+  name: wallet-service
+  namespace: moonpay
+spec:
+  ports:
+    - name: 8081-50053
+      port: 80
+      protocol: TCP
+      targetPort: 50053
+  selector:
+    app: wallet-service
+  type: ClusterIP

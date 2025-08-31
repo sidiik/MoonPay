@@ -30,3 +30,13 @@ docker_build('notification-service', 'services/notification_service', dockerfile
 
 k8s_resource(workload='notification-service')
 
+# Wallet service 
+k8s_yaml([
+  'services/wallet_service/zarf/k8s/deployment.yaml',
+  'services/wallet_service/zarf/k8s/configmap.yaml',
+  'services/wallet_service/zarf/k8s/secret.yaml',
+])
+
+docker_build('wallet-service', 'services/wallet_service', dockerfile='services/wallet_service/Dockerfile')
+
+k8s_resource(workload='wallet-service')
