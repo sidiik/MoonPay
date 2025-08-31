@@ -8,33 +8,11 @@ import (
 )
 
 type Config struct {
-	Port string
-
-	// Write only Databases
-	DBWriterName     string
-	DBWriterUser     string
-	DBWriterPassword string
-	DBWriterHost     string
-	DBWriterPort     string
-
-	// Read only databases
-	DBReaderName     string
-	DBReaderUser     string
-	DBReaderPassword string
-	DBReaderHost     string
-	DBReaderPort     string
-
-	// JWT
-	AccessTokenSecret  string
-	RefreshTokenSecret string
-	AccessTokenExpire  string
-	RefreshTokenExpire string
+	Port       string
+	MongoDBURI string
 
 	// RabbitMQ
 	RabbitMQUrl string
-
-	// OTP
-	OtpCodeExpire string
 
 	// REDIS
 	RedisAddr     string
@@ -48,7 +26,8 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	AppConfig = Config{
-		Port: getEnv("PORT"),
+		Port:       getEnv("PORT"),
+		MongoDBURI: getEnv("MONGODB_URI"),
 	}
 
 }

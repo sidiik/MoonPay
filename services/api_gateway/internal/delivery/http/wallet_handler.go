@@ -13,6 +13,7 @@ import (
 	"github.com/sidiik/moonpay/api_gateway/internal/middleware"
 	"github.com/sidiik/moonpay/api_gateway/pkg"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -48,7 +49,13 @@ func (h *WalletHandler) RequestWallet(c *gin.Context) {
 
 	userd := user.(*authpb.GetUserByEmailResponse)
 
-	ctx := c.Request.Context()
+	userIDStr := strconv.Itoa(int(userd.Id))
+
+	md := metadata.New(map[string]string{
+		"user-id": userIDStr,
+	})
+
+	ctx := metadata.NewOutgoingContext(c.Request.Context(), md)
 
 	resp, err := h.walletServiceClient.RequestWallet(ctx, &walletpb.RequestWalletRequest{
 		UserId: strconv.Itoa(int(userd.Id)),
