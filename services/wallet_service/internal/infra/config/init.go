@@ -8,14 +8,16 @@ import (
 )
 
 type Config struct {
-	AppName string
+	Port       string
+	MongoDBURI string
 
-	EmailUsername string
-	EmailPassword string
-	SmtpHost      string
-	SmtpPort      string
-
+	// RabbitMQ
 	RabbitMQUrl string
+
+	// REDIS
+	RedisAddr     string
+	RedisPassword string
+	RedisDb       string
 }
 
 var AppConfig Config
@@ -24,12 +26,8 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	AppConfig = Config{
-		AppName:       getEnv("APP_NAME"),
-		EmailUsername: getEnv("EMAIL_USERNAME"),
-		EmailPassword: getEnv("EMAIL_PASSWORD"),
-		RabbitMQUrl:   getEnv("RABBITMQ_URL"),
-		SmtpHost:      getEnv("SMTP_HOST"),
-		SmtpPort:      getEnv("SMTP_PORT"),
+		Port:       getEnv("PORT"),
+		MongoDBURI: getEnv("MONGODB_URI"),
 	}
 
 }

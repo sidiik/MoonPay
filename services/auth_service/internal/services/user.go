@@ -97,13 +97,13 @@ func (s *UserService) SignIn(ctx context.Context, data *authpb.LoginRequest) (*a
 		return nil, status.Error(codes.Unauthenticated, constants.ErrInvalidCredentials)
 	}
 
-	accessToken, err := utils.GenerateAccessToken(existingUser.Email)
+	accessToken, err := utils.GenerateAccessToken(existingUser.ID)
 	if err != nil {
 		s.log.Error("failed to generate access token", "error", err)
 		return nil, status.Error(codes.Internal, constants.ErrInternalServer)
 	}
 
-	refreshToken, err := utils.GenerateRefreshToken(existingUser.Email)
+	refreshToken, err := utils.GenerateRefreshToken(existingUser.ID)
 	if err != nil {
 		s.log.Error("failed to generate refresh token", "error", err)
 		return nil, status.Error(codes.Internal, constants.ErrInternalServer)
