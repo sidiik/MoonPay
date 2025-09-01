@@ -34,7 +34,7 @@ func NewAuthHandler(client authpb.AuthServiceClient, validator *validator.Valida
 		auth.POST("/signin", handler.Signin)
 		auth.POST("/request-password-reset", handler.RequestPasswordReset)
 		auth.POST("/reset-password", handler.ResetPassword)
-		auth.GET("/whoami", middleware.Authenticate(handler.authClient), handler.WhoAmI)
+		auth.GET("/whoami", middleware.Authenticate(), handler.WhoAmI)
 	}
 
 }
@@ -173,6 +173,6 @@ func (h *AuthHandler) ResetPassword(c *gin.Context) {
 }
 
 func (h *AuthHandler) WhoAmI(c *gin.Context) {
-	user := c.MustGet("user").(*authpb.GetUserByEmailResponse)
-	pkg.SendResponse(c, http.StatusOK, codes.OK.String(), "", user, nil)
+	userID := c.MustGet("userID").(*authpb.GetUserByEmailResponse)
+	pkg.SendResponse(c, http.StatusOK, codes.OK.String(), "", userID, nil)
 }

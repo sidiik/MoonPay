@@ -2,7 +2,6 @@ package http
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -15,6 +14,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type WalletHandler struct {
@@ -28,28 +28,31 @@ func NewWalletHandler(log domain.Logger, walletServiceClient walletpb.WalletServ
 	handler := &WalletHandler{
 		walletServiceClient: walletServiceClient,
 		validator:           validator,
-		authClient:          authClient,
 		log:                 log,
 	}
 
 	walletGroup := r.Group("/wallet")
 	{
-		walletGroup.POST("/request", middleware.Authenticate(handler.authClient), handler.RequestWallet)
+		walletGroup.POST("/request", middleware.Authenticate(), handler.RequestWallet)
+		walletGroup.POST("/get-my-wallet", middleware.Authenticate(), handler.GetMyWallet)
 	}
 
 }
 
 func (h *WalletHandler) RequestWallet(c *gin.Context) {
-	user, exists := c.Get("user")
+	userID, exists := c.Get("userID")
 	if !exists {
 		pkg.SendResponse(c, http.StatusUnauthorized, codes.Unauthenticated.String(), constants.ErrUnauthorized, nil, nil)
 		c.Abort()
 		return
 	}
 
-	userd := user.(*authpb.GetUserByEmailResponse)
-
-	userIDStr := strconv.Itoa(int(userd.Id))
+	userIDStr, ok := userID.(string)
+	if !ok {
+		pkg.SendResponse(c, http.StatusUnauthorized, codes.Unauthenticated.String(), constants.ErrUnauthorized, nil, nil)
+		c.Abort()
+		return
+	}
 
 	md := metadata.New(map[string]string{
 		"user-id": userIDStr,
@@ -57,9 +60,41 @@ func (h *WalletHandler) RequestWallet(c *gin.Context) {
 
 	ctx := metadata.NewOutgoingContext(c.Request.Context(), md)
 
-	resp, err := h.walletServiceClient.RequestWallet(ctx, &walletpb.RequestWalletRequest{
-		UserId: strconv.Itoa(int(userd.Id)),
+	resp, err := h.walletServiceClient.RequestWallet(ctx, &emptypb.Empty{})
+
+	if err != nil {
+		s, _ := status.FromError(err)
+		pkg.SendResponse(c, http.StatusBadRequest, s.Code().String(), s.Message(), nil, s.Err())
+		c.Abort()
+		return
+	}
+
+	pkg.SendResponse(c, http.StatusCreated, codes.OK.String(), "", resp, nil)
+
+}
+
+func (h *WalletHandler) GetMyWallet(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		pkg.SendResponse(c, http.StatusUnauthorized, codes.Unauthenticated.String(), constants.ErrUnauthorized, nil, nil)
+		c.Abort()
+		return
+	}
+
+	userIDStr, ok := userID.(string)
+	if !ok {
+		pkg.SendResponse(c, http.StatusUnauthorized, codes.Unauthenticated.String(), constants.ErrUnauthorized, nil, nil)
+		c.Abort()
+		return
+	}
+
+	md := metadata.New(map[string]string{
+		"user-id": userIDStr,
 	})
+
+	ctx := metadata.NewOutgoingContext(c.Request.Context(), md)
+
+	resp, err := h.walletServiceClient.GetMyWallet(ctx, &emptypb.Empty{})
 
 	if err != nil {
 		s, _ := status.FromError(err)

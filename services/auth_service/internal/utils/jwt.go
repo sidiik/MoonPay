@@ -8,23 +8,25 @@ import (
 	"github.com/sidiik/moonpay/auth_service/internal/infra/config"
 )
 
-func GenerateAccessToken(email string) (*string, error) {
-	tokenStr, err := GenerateToken(email, false)
+func GenerateAccessToken(id uint) (*string, error) {
+	tokenStr, err := GenerateToken(id, false)
 	return tokenStr, err
 }
 
-func GenerateRefreshToken(email string) (*string, error) {
-	tokenStr, err := GenerateToken(email, true)
+func GenerateRefreshToken(id uint) (*string, error) {
+	tokenStr, err := GenerateToken(id, true)
 	return tokenStr, err
 }
 
-func GenerateToken(email string, isRefresh bool) (*string, error) {
+func GenerateToken(id uint, isRefresh bool) (*string, error) {
 
 	var (
 		jwtExpire int64
 		jwtSecret []byte
 		err       error
 	)
+
+	idStr := strconv.Itoa(int(id))
 
 	switch isRefresh {
 	case true:
@@ -44,7 +46,7 @@ func GenerateToken(email string, isRefresh bool) (*string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": email,
+		"sub": idStr,
 		"nbf": time.Now().Unix(),
 		"exp": time.Now().Add(time.Hour * time.Duration(jwtExpire)).Unix(),
 	})

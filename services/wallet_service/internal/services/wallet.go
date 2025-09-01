@@ -21,7 +21,7 @@ func NewWalletUsecase(walletRepo domain.WalletRepository, log domain.Logger) *Wa
 	}
 }
 
-func (u *WalletUsecase) RequestWallet(ctx context.Context) (any, error) {
+func (u *WalletUsecase) RequestWallet(ctx context.Context) (*string, error) {
 	u.log.Info("checking if the user id is attached into the context")
 	userID, err := pkg.GetUserIDFromCtx(ctx, u.log)
 	if err != nil {
@@ -40,7 +40,7 @@ func (u *WalletUsecase) RequestWallet(ctx context.Context) (any, error) {
 		return nil, status.Error(codes.Internal, "unable to create wallet")
 	}
 
-	return walletID, nil
+	return &walletID, nil
 }
 
 func (u *WalletUsecase) GetMyWallet(ctx context.Context) (*domain.Wallet, error) {

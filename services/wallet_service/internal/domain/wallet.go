@@ -4,20 +4,20 @@ import (
 	"context"
 	"time"
 
-	"github.com/shopspring/decimal"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Wallet struct {
-	ID        string          `bson:"_id"`
-	UserID    int             `bson:"user_id"`
-	Balance   decimal.Decimal `bson:"balance"`
-	Status    string          `bson:"status"`
-	CreatedAt time.Time       `bson:"created_at"`
-	UpdatedAt time.Time       `bson:"updated_at"`
+	ID        primitive.ObjectID   `bson:"_id"`
+	UserID    int                  `bson:"user_id"`
+	Balance   primitive.Decimal128 `bson:"balance"`
+	Status    string               `bson:"status"`
+	CreatedAt time.Time            `bson:"created_at"`
+	UpdatedAt time.Time            `bson:"updated_at"`
 }
 
 type WalletRepository interface {
 	GetWalletByID(ctx context.Context, walletID string) (*Wallet, error)
 	GetWalletByUserID(ctx context.Context, UserID int) (*Wallet, error)
-	CreateWallet(ctx context.Context, userID int) (any, error)
+	CreateWallet(ctx context.Context, userID int) (string, error)
 }

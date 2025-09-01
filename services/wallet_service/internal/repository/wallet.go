@@ -2,10 +2,11 @@ package repository
 
 import (
 	"context"
+	"time"
 
-	"github.com/shopspring/decimal"
 	"github.com/sidiik/moonpay/wallet_service/internal/domain"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -31,12 +32,17 @@ func (r *WalletRepository) GetWalletByUserID(ctx context.Context, UserID int) (*
 	return &wallet, err
 }
 
-func (r *WalletRepository) CreateWallet(ctx context.Context, userID int) (any, error) {
+func (r *WalletRepository) CreateWallet(ctx context.Context, userID int) (string, error) {
+	balance, _ := primitive.ParseDecimal128("0")
 	wallet := &domain.Wallet{
-		Balance: decimal.NewFromInt(0),
-		UserID:  userID,
+		ID:        primitive.NewObjectID(),
+		Balance:   balance,
+		UserID:    userID,
+		Status:    "active",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
-	result, err := r.collection.InsertOne(ctx, wallet)
-	return result.InsertedID, err
+	_, err := r.collection.InsertOne(ctx, wallet)
+	return wallet.ID.Hex(), err
 }
